@@ -23,14 +23,8 @@
 /* eslint no-console: 0 */
 'use strict';
 
-
-var React = require('react');
-var ReactNative = require('react-native');
-var {
-  StyleSheet,
-  Text,
-  View,
-} = ReactNative;
+import React, { Component } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
 exports.framework = 'React';
 exports.title = 'Geolocation';
@@ -45,11 +39,15 @@ exports.examples = [
   }
 ];
 
-class GeolocationExample extends React.Component {
-  state = {
-    initialPosition: 'unknown',
-    lastPosition: 'unknown',
-  };
+export default class GeolocationExample extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialPosition: 'unknown',
+      lastPosition: 'unknown',
+    };
+  }
 
   watchID: ?number = null;
 
@@ -62,10 +60,13 @@ class GeolocationExample extends React.Component {
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
+
     this.watchID = navigator.geolocation.watchPosition((position) => {
-      var lastPosition = JSON.stringify(position);
-      this.setState({lastPosition});
-    });
+        var lastPosition = JSON.stringify(position);
+        this.setState({lastPosition});
+      },
+      null,
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
   }
 
   componentWillUnmount() {
@@ -74,7 +75,8 @@ class GeolocationExample extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.mainView}>
+
         <Text>
           <Text style={styles.title}>Initial position: </Text>
           {this.state.initialPosition}
@@ -83,13 +85,23 @@ class GeolocationExample extends React.Component {
           <Text style={styles.title}>Current position: </Text>
           {this.state.lastPosition}
         </Text>
+
       </View>
     );
   }
 }
 
+
 var styles = StyleSheet.create({
   title: {
     fontWeight: '500',
   },
+
+  mainView:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:16
+  }
 });
+
