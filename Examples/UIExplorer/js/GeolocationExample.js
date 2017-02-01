@@ -23,14 +23,8 @@
 /* eslint no-console: 0 */
 'use strict';
 
-
-var React = require('react');
-var ReactNative = require('react-native');
-var {
-  StyleSheet,
-  Text,
-  View,
-} = ReactNative;
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, } from 'react-native';
 
 exports.framework = 'React';
 exports.title = 'Geolocation';
@@ -45,7 +39,7 @@ exports.examples = [
   }
 ];
 
-class GeolocationExample extends React.Component {
+export default class GeolocationExample extends Component {
   state = {
     initialPosition: 'unknown',
     lastPosition: 'unknown',
@@ -62,10 +56,14 @@ class GeolocationExample extends React.Component {
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      var lastPosition = JSON.stringify(position);
-      this.setState({lastPosition});
-    });
+    this.watchID = navigator.geolocation.watchPosition(
+      (position) => {
+        var lastPosition = JSON.stringify(position);
+        this.setState({lastPosition});
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   }
 
   componentWillUnmount() {
@@ -74,7 +72,7 @@ class GeolocationExample extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.mainView}>
         <Text>
           <Text style={styles.title}>Initial position: </Text>
           {this.state.initialPosition}
@@ -91,5 +89,11 @@ class GeolocationExample extends React.Component {
 var styles = StyleSheet.create({
   title: {
     fontWeight: '500',
+  },
+  mainView:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:16,
   },
 });
